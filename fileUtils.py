@@ -42,7 +42,6 @@ def findFilePath():
 
 
 def getDateFromFileName(fileName, prefix):
-
     #remove prefix from file name
     date_string = '/'.join(fileName.split(prefix)[1::])
     #remove file type
@@ -117,10 +116,7 @@ def readExcelFile(fileName, sheetName='Sheet1', headerInfo = 3):
     else:
         return pd.read_excel(fileName, sheet_name=sheetName, header=headerInfo, engine='openpyxl')
 
-
-
 def writeExcelFile(fileName, dfs, folder):
-
     path1 = os.path.join(findFilePath(), folder)
     print (path1)
     writer = pd.ExcelWriter(fileName, engine='xlsxwriter')
