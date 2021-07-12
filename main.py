@@ -12,9 +12,11 @@
 #
 #   OS: only tested on Windows 10 64-bit
 #   Dependencies: pandas, numpy, openpyxl, xlsxwriter
+#                  pandasgui: pypiwin32
 #   ---------------------------------------------------------------------------------
 import fileUtils as fu
 import reportUtils as ru
+from pandasgui import show
 # ----------------------------------------------------------------------------
 inputFolderName = 'MDMSReport'
 resultFolderName = 'CompletedReport'
@@ -28,12 +30,14 @@ folderBool2 = fu.FolderCheck(resultFolderName)
 (currentReport, priorReport, currentReportDate, priorReportDate, fileName1) = ru.FindFilesForReport()
 
 # put each dataframe(excel sheet) into a dictionary
-dfDict = ru.MorningReport(currentReport, priorReport, currentReportDate, priorReportDate)
+(dfDict,sites,offlineMeters,naughtyList) = ru.MorningReport(currentReport, priorReport, currentReportDate, priorReportDate)
 
 # Name of the generated document
 finalFileName = 'Completed_' + fileName1
 
 # Generate xlsx file with each dataframe as its own sheet
 fu.writeExcelFile(finalFileName, dfDict, resultFolderName)
+
+show(sites,offlineMeters,naughtyList)
 
 print('Finished')

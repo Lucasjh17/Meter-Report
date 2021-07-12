@@ -136,7 +136,11 @@ def writeExcelFile(fileName, dfs, folder):
             column_settings = [{'header': column} for column in df.columns]
             worksheet.add_table(0, 0, max_row, max_col - 1, {'columns':column_settings})
 
-            worksheet.conditional_format('D1:D2000', {'type': '3_color_scale'})
+            # Add Colors
+            if sheetname == "Meter Status":
+                worksheet.conditional_format('D1:D500', {'type': '3_color_scale', 'min_color': '#5eff6c', 'max_color': '#ff7373'})
+            else:
+                worksheet.conditional_format('D1:D500', {'type': '3_color_scale'})
             
             # Set the column width to the size of the largest content 
             # ----------------------------------------------------------------------------

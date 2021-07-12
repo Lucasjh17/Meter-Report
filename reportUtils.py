@@ -2,6 +2,7 @@ import os
 import pandas as pd
 import excelUtils as xu
 import fileUtils as fu
+from pandasgui import show
 
 # Declaring frequently used strings as variables
 # ----------------------------------------------------------------------------
@@ -90,4 +91,8 @@ def MorningReport(currentReport, priorReport, currentReportDate, priorReportDate
 
     # Add the dataframs to list to send them off to be exported
     dfDict = {"Meter Status": sites, "Offline Meters": offlineMeters, "Naughty List": naughtyList}
-    return dfDict
+
+    
+
+    return (dfDict,sites,offlineMeters,naughtyList)
+    
