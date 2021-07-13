@@ -20,14 +20,36 @@ from pandasgui import show
 # ----------------------------------------------------------------------------
 inputFolderName = 'MDMSReport'
 resultFolderName = 'CompletedReport'
+morningReport = 'Meter_Status_'
+afternoonReport = 'Afternoon_Report_'
 
 # Creates folder if not found
 # folderBool#  indicates whether or not the folder was created
 folderBool1 = fu.FolderCheck(inputFolderName)
 folderBool2 = fu.FolderCheck(resultFolderName)
 
-# Collect variables to run morning report
-(currentReport, priorReport, currentReportDate, priorReportDate, fileName1) = ru.FindFilesForReport()
+
+def menu():
+    print('[1] Morning Report')
+    print('[2] Afternoon Report')
+    print('[3] Exit')
+    n = input()
+
+    if n == '1':
+        # Collect variables to run morning report
+        (currentReport, priorReport, currentReportDate, priorReportDate, fileName1) = ru.FindFilesForReport(morningReport)
+        return (currentReport, priorReport, currentReportDate, priorReportDate, fileName1)
+    elif n == '2':
+        (currentReport, priorReport, currentReportDate, priorReportDate, fileName1) = ru.FindFilesForReport(afternoonReport)
+        return (currentReport, priorReport, currentReportDate, priorReportDate, fileName1)
+    elif n == '3':
+        exit()
+    else:
+        menu()  
+    
+    
+
+(currentReport, priorReport, currentReportDate, priorReportDate, fileName1) = menu()
 
 # put each dataframe(excel sheet) into a dictionary
 (dfDict,sites,offlineMeters,naughtyList) = ru.MorningReport(currentReport, priorReport, currentReportDate, priorReportDate)

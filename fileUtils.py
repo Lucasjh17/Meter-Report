@@ -116,7 +116,7 @@ def readExcelFile(fileName, sheetName='Sheet1', headerInfo = 3):
     else:
         return pd.read_excel(fileName, sheet_name=sheetName, header=headerInfo, engine='openpyxl')
 
-def writeExcelFile(fileName, dfs, folder):
+def writeExcelFile(fileName, dfs, folder = 'CompletedReport'):
     path1 = os.path.join(findFilePath(), folder)
     print (path1)
     writer = pd.ExcelWriter(fileName, engine='xlsxwriter')

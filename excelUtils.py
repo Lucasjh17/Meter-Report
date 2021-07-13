@@ -30,3 +30,8 @@ def getRowsBeforeString(df, column, text):
 
     df = df.loc[: df[(df[column] == text)].index[0], :]
     return df
+
+def getRowsAfterString(df, column, text):
+
+    df = df.loc[df[(df[column] == text)].index[0] :, :]
+    return df

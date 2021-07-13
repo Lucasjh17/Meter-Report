@@ -2,25 +2,23 @@ import os
 import pandas as pd
 import excelUtils as xu
 import fileUtils as fu
-from pandasgui import show
 
 # Declaring frequently used strings as variables
 # ----------------------------------------------------------------------------
 excelFile = '.xlsx'
-meterStatus = 'Meter_Status_'
-afternoonReport = 'Afternoon_Report_'
+
 inputFolderName = 'MDMSReport'
 resultFolderName = 'CompletedReport'
 # ----------------------------------------------------------------------------
 
-def FindFilesForReport():
+def FindFilesForReport(fileName):
     # Find meter status files
-    meterStatusList = fu.findFilesOfTypeWithPrefix(meterStatus, excelFile)
+    meterStatusList = fu.findFilesOfTypeWithPrefix(fileName, excelFile)
 
     # Check to make sure the files are there
     while meterStatusList == []:
         input('Please place the MDMS Reports in the MDMSReport folder and then hit enter')
-        meterStatusList = fu.findFilesOfTypeWithPrefix(meterStatus, excelFile)
+        meterStatusList = fu.findFilesOfTypeWithPrefix(fileName, excelFile)
 
     # Sort the list so the newest datetime is first
     meterStatusList.sort(reverse=True)
@@ -30,8 +28,8 @@ def FindFilesForReport():
     priorReportDate = meterStatusList[1].strftime('%d%b%Y')
 
     # Recreate file name from datetime
-    fileName1 = meterStatus + currentReportDate + excelFile
-    fileName2 = meterStatus + priorReportDate + excelFile
+    fileName1 = fileName + currentReportDate + excelFile
+    fileName2 = fileName + priorReportDate + excelFile
 
     # Path to the files
     path1 = os.path.join(inputFolderName, fileName1)
@@ -44,9 +42,26 @@ def FindFilesForReport():
     return (currentReport, priorReport, currentReportDate, priorReportDate, fileName1)
 
 def MorningReport(currentReport, priorReport, currentReportDate, priorReportDate):
-    # Only gets what comes before "  USARC"
-    currentReport = xu.getRowsBeforeString(currentReport, 'Organization', '  USARC')
-    priorReport = xu.getRowsBeforeString(priorReport, 'Organization', '  USARC')
+    # Only gets what comes before "  USARC", which should be the IMCOM sites
+    currentIMCOMSites = xu.getRowsBeforeString(currentReport, 'Organization', '  USARC')
+    priorIMCOMsites = xu.getRowsBeforeString(priorReport, 'Organization', '  USARC')
+
+    # Get the AMC sites
+    currentAMCSites = xu.getRowsBeforeString(currentReport, 'Organization Level', 'UP Meters')
+    priorAMCSites = xu.getRowsBeforeString(priorReport, 'Organization Level', 'UP Meters')
+
+    currentAMCSites = xu.getRowsAfterString(currentAMCSites, 'Organization', '  AMC')
+    priorAMCSites = xu.getRowsAfterString(priorAMCSites, 'Organization', '  AMC')
+    currentAMCSites = xu.sortByTextInAColumn(currentAMCSites,'Organization Level', 'Site')
+
+    
+    currentSites = [currentAMCSites, currentIMCOMSites]
+    priorSites = [priorAMCSites, priorIMCOMsites]
+
+    currentReport = pd.concat(currentSites)
+    priorReport = pd.concat(priorSites)
+
+
 
     # Calculates offline meters in sheet one
     # Adds two new columns; Offline Meters, and Percent of Meters Offline
