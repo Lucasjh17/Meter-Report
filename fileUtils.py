@@ -137,8 +137,10 @@ def writeExcelFile(fileName, dfs, folder = 'CompletedReport'):
             worksheet.add_table(0, 0, max_row, max_col - 1, {'columns':column_settings})
 
             # Add Colors
-            if sheetname == "Meter Status":
+            if sheetname == "Meter Status" or sheetname == "UP Meter Status":
                 worksheet.conditional_format('D1:D500', {'type': '3_color_scale', 'min_color': '#5eff6c', 'max_color': '#ff7373'})
+            elif sheetname == "Offline Meters" or sheetname == "UP Offline Meters":
+                worksheet.conditional_format('F1:F500', {'type': '3_color_scale'})
             else:
                 worksheet.conditional_format('D1:D500', {'type': '3_color_scale'})
             

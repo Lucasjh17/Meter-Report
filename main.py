@@ -16,7 +16,8 @@
 #   ---------------------------------------------------------------------------------
 import fileUtils as fu
 import reportUtils as ru
-from pandasgui import show
+import os
+#from pandasgui import show
 # ----------------------------------------------------------------------------
 inputFolderName = 'MDMSReport'
 resultFolderName = 'CompletedReport'
@@ -27,6 +28,7 @@ afternoonReport = 'Afternoon_Report_'
 # folderBool#  indicates whether or not the folder was created
 folderBool1 = fu.FolderCheck(inputFolderName)
 folderBool2 = fu.FolderCheck(resultFolderName)
+
 
 
 def menu():
@@ -60,6 +62,6 @@ finalFileName = 'Completed_' + fileName1
 # Generate xlsx file with each dataframe as its own sheet
 fu.writeExcelFile(finalFileName, dfDict, resultFolderName)
 
-show(sites,offlineMeters,naughtyList)
+#show(sites,offlineMeters,naughtyList)
 
 print('Finished')
